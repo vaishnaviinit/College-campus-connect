@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CampusConnect Pretty Theme</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --fg: #1f2937;
+      --accent: #3b82f6;
+      --accent-dark: #1d4ed8;
+      --card-bg: #ffffff;
+      --card-border: #e5e7eb;
+    }
+    .theme-blue {
+      --bg: #f3f4f6; --fg: #1f2937;
+      --accent: #3b82f6; --accent-dark: #1d4ed8;
+      --card-bg: #fff; --card-border: #93c5fd;
+    }
+    .theme-green {
+      --bg: #ecfdf5; --fg: #065f46;
+      --accent: #10b981; --accent-dark: #047857;
+      --card-bg: #fff; --card-border: #6ee7b7;
+    }
+    .theme-purple {
+      --bg: #faf5ff; --fg: #4c1d95;
+      --accent: #8b5cf6; --accent-dark: #7c3aed;
+      --card-bg: #fff; --card-border: #c4b5fd;
+    }
+    .theme-amber {
+      --bg: #fff7ed; --fg: #92400e;
+      --accent: #f59e0b; --accent-dark: #b45309;
+      --card-bg: #fff; --card-border: #fde68a;
+    }
+    .theme-red {
+      --bg: #fef2f2; --fg: #991b1b;
+      --accent: #ef4444; --accent-dark: #dc2626;
+      --card-bg: #fff; --card-border: #fecaca;
+    }
+    .theme-pink {
+      --bg: #fdf2f8; --fg: #831843;
+      --accent: #ec4899; --accent-dark: #be185d;
+      --card-bg: #fff; --card-border: #f9a8d4;
+    }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      font-family: Inter, Poppins, Roboto, Georgia, serif;
+      transition: background 0.3s, color 0.3s;
+    }
+    .theme-button {
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--accent); color: #fff; border-radius: 50%;
+      width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 1.5rem; cursor:pointer;
+    }
+    .theme-panel {
+      position:fixed; bottom:80px; right:20px;
+      background:var(--card-bg); color:var(--fg); border-radius:1rem; padding:1rem;
+      display:none; z-index:100; width:235px; border:1px solid var(--card-border);
+      box-shadow:0 4px 12px rgba(0,0,0,0.11);
+    }
+    .nav-tabs {
+      display:flex; border-bottom:2px solid var(--card-border);
+      background:var(--card-bg); margin-bottom:2rem;
+    }
+    .nav-tab { padding:0.8rem 1.6rem; cursor:pointer; color:var(--fg);
+      border-bottom:2px solid transparent; transition:.2s;}
+    .nav-tab.active { border-bottom:2px solid var(--accent); color:var(--accent);}
+    .main-content { display:none;}
+    .main-content.active {display:block;}
+    .feature-card,.stat-card,.saved-item,#themePanel,.qr-container {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 0.8rem; transition:.3s;
+    }
+    .feature-card {padding:1.2rem;}
+    .feature-card:hover {box-shadow:0 6px 22px rgba(0,0,0,0.09);}
+    .stat-card {
+      background:var(--accent); color:#fff; box-shadow:0 0 10px rgba(0,0,0,0.10);
+      margin-bottom:1.4rem;
+    }
+    .btn-primary {
+      background: var(--accent) !important; color: #fff !important;
+      border: none; border-radius:0.5rem; transition:.2s;
+    }
+    .btn-primary:hover {background:var(--accent-dark) !important;}
+    .saved-item {display:flex;justify-content:space-between;align-items:center;padding:0.6rem;}
+    .delete-btn {background:var(--accent);color:#fff;border:none;border-radius:0.3rem;padding:0.2rem 0.7rem;cursor:pointer;}
+    .delete-btn:hover {background:var(--accent-dark);}
+    input,select,textarea {border:1px solid var(--card-border);border-radius:0.4rem;}
+    input,select,textarea,button {font-family:inherit;}
+    .qr-container {padding:1rem;}
+    .download-btn {background:var(--accent); color:#fff;border:none;border-radius:0.4rem;padding:0.4rem 1rem;margin-top:0.7rem;}
+    .download-btn:hover {background:var(--accent-dark);}
+    #featureModal {display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.09);align-items:center;justify-content:center;z-index:200;}
+    #featureContent {background:var(--card-bg);padding:2rem;border-radius:1rem;max-width:420px;width:calc(100vw - 3rem);box-shadow:0 8px 24px rgba(0,0,0,0.13);color:var(--fg);}
+    #closeFeatureBtn { float:right; font-size:2rem; color:var(--accent); background:none;border:none;cursor:pointer;}
+  </style>
+</head>
+<body class="theme-blue">
+<div class="bg-white shadow-sm">
+  <div class="max-w-6xl mx-auto">
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="showTab('dashboard')">📊 Dashboard</div>
+      <div class="nav-tab" onclick="showTab('features')">🏠 Features</div>
+    </div>
+  </div>
+</div>
+<div id="dashboard" class="main-content active">
+  <div class="p-8">
+    <h1 class="text-3xl font-bold mb-2">CampusConnect Dashboard</h1>
+    <p class="mb-8">Overview of your campus activities and saved data</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="stat-card p-6"><div class="flex items-center justify-between">
+        <div><p>Timetable Entries</p><p id="timetableCount" class="text-3xl font-bold">0</p></div><div class="text-4xl">📅</div></div></div>
+      <div class="stat-card p-6"><div class="flex items-center justify-between">
+        <div><p>QR Codes Gen.</p><p id="qrCount" class="text-3xl font-bold">0</p></div><div class="text-4xl">📱</div></div></div>
+      <div class="stat-card p-6"><div class="flex items-center justify-between">
+        <div><p>Lost & Found</p><p id="lostFoundCount" class="text-3xl font-bold">0</p></div><div class="text-4xl">🔍</div></div></div>
+      <div class="stat-card p-6"><div class="flex items-center justify-between">
+        <div><p>Notices Posted</p><p id="noticesCount" class="text-3xl font-bold">0</p></div><div class="text-4xl">📢</div></div></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="feature-card">
+        <h3 class="text-xl font-bold mb-4">📅 Recent Timetable Entries</h3>
+        <div id="recentTimetable"><p class="text-gray-500 text-center py-4">No timetable entries yet</p></div>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-xl font-bold mb-4">🔍 Recent Lost & Found</h3>
+        <div id="recentLostFound"><p class="text-gray-500 text-center py-4">No reports yet</p></div>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-xl font-bold mb-4">📢 Recent Notices</h3>
+        <div id="recentNotices"><p class="text-gray-500 text-center py-4">No notices posted yet</p></div>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-xl font-bold mb-4">⚡ Quick Actions</h3>
+        <div class="space-y-3">
+          <button class="w-full btn-primary p-3" onclick="showTab('features');showFeature('timetable')">📅 Add Timetable Entry</button>
+          <button class="w-full btn-primary p-3" onclick="showTab('features');showFeature('qr')">📱 Generate QR Code</button>
+          <button class="w-full btn-primary p-3" onclick="showTab('features');showFeature('lostfound')">🔍 Report Lost Item</button>
+          <button class="w-full btn-primary p-3" onclick="showTab('features');showFeature('noticeboard')">📢 Post Notice</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="features" class="main-content">
+  <div class="p-10 text-center">
+    <h1 class="text-3xl font-bold mb-4">CampusConnect Features</h1>
+    <p class="mb-8">Explore your campus dashboard tools and utilities</p>
+  </div>
+  <div class="max-w-4xl mx-auto mt-8 px-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div class="feature-card" onclick="showFeature('timetable')">
+        <div class="text-2xl mb-3">📅</div>
+        <h3 class="font-bold text-xl mb-2">Timetable Generator</h3>
+        <p>Create and manage your class timetable.</p>
+      </div>
+      <div class="feature-card" onclick="showFeature('qr')">
+        <div class="text-2xl mb-3">📱</div>
+        <h3 class="font-bold text-xl mb-2">QR Generator</h3>
+        <p>Generate QR codes for events or resources.</p>
+      </div>
+      <div class="feature-card" onclick="showFeature('lostfound')">
+        <div class="text-2xl mb-3">🔍</div>
+        <h3 class="font-bold text-xl mb-2">Lost & Found</h3>
+        <p>Report or find lost items on campus.</p>
+      </div>
+      <div class="feature-card" onclick="showFeature('noticeboard')">
+        <div class="text-2xl mb-3">📢</div>
+        <h3 class="font-bold text-xl mb-2">Notice Board</h3>
+        <p>View or post campus-wide notices.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="featureModal"><div id="featureContent"></div></div>
+<div id="themeBtn" class="theme-button">⚙️</div>
+<div id="themePanel" class="theme-panel">
+  <h2 class="text-lg font-semibold mb-2">🎨 Theme Settings</h2>
+  <div>
+    <label class="block text-sm">Primary Color:</label>
+    <select id="colorSelect" class="w-full border rounded p-1 mb-2">
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+      <option value="purple">Purple</option>
+      <option value="amber">Amber</option>
+      <option value="red">Red</option>
+      <option value="pink">Pink</option>
+    </select>
+  </div>
+  <div>
+    <label class="block text-sm">Font:</label>
+    <select id="fontSelect" class="w-full border rounded p-1 mb-2">
+      <option value="Inter, sans-serif">Inter</option>
+      <option value="Poppins, sans-serif">Poppins</option>
+      <option value="Roboto, sans-serif">Roboto</option>
+      <option value="Georgia, serif">Georgia</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2 mb-2">
+    <label class="text-sm">🌙 Dark Mode:</label>
+    <input type="checkbox" id="darkToggle">
+  </div>
+  <button id="saveTheme" class="btn-primary px-3 py-1 w-full">Save</button>
+</div>
+<script>
+let timetableItems = JSON.parse(localStorage.getItem('timetable')||'[]');
+let lostFoundItems = JSON.parse(localStorage.getItem('lostfound')||'[]');
+let noticeItems = JSON.parse(localStorage.getItem('notices')||'[]');
+let qrCount = parseInt(localStorage.getItem('qrCount')||'0');
+function showTab(tabName){
+  document.querySelectorAll('.main-content').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
+  if(tabName==='dashboard') updateDashboard();
+}
+function updateDashboard(){
+  document.getElementById('timetableCount').textContent=timetableItems.length;
+  document.getElementById('qrCount').textContent=qrCount;
+  document.getElementById('lostFoundCount').textContent=lostFoundItems.length;
+  document.getElementById('noticesCount').textContent=noticeItems.length;
+  updateRecentTimetable(); updateRecentLostFound(); updateRecentNotices();
+}
+function updateRecentTimetable(){const c=document.getElementById('recentTimetable');
+  if(!timetableItems.length){c.innerHTML='<p class="text-gray-500 text-center py-4">No timetable entries yet</p>';return;}
+  c.innerHTML=timetableItems.slice(-3).reverse().map(item=>`<div class="saved-item"><span><strong>${item.subject}</strong> - ${item.day} at ${item.time}</span></div>`).join('');
+}
+function updateRecentLostFound(){const c=document.getElementById('recentLostFound');
+  if(!lostFoundItems.length){c.innerHTML='<p class="text-gray-500 text-center py-4">No reports yet</p>';return;}
+  c.innerHTML=lostFoundItems.slice(-3).reverse().map(item=>`<div class="saved-item"><span><strong>[${item.type}]</strong> ${item.description} - ${item.location}</span></div>`).join('');
+}
+function updateRecentNotices(){const c=document.getElementById('recentNotices');
+  if(!noticeItems.length){c.innerHTML='<p class="text-gray-500 text-center py-4">No notices posted yet</p>';return;}
+  c.innerHTML=noticeItems.slice(-3).reverse().map(item=>`<div class="saved-item"><span><strong>[${item.category}]</strong> ${item.title}</span></div>`).join('');
+}
+const themeBtn=document.getElementById('themeBtn'),themePanel=document.getElementById('themePanel'),
+colorSelect=document.getElementById('colorSelect'),fontSelect=document.getElementById('fontSelect'),darkToggle=document.getElementById('darkToggle'),
+saveTheme=document.getElementById('saveTheme');
+themeBtn.onclick=()=>{themePanel.style.display=themePanel.style.display==='block'?'none':'block';};
+window.addEventListener('load',()=>{
+  const savedColor=localStorage.getItem('themeColor')||'blue',f=localStorage.getItem('themeFont'),d=localStorage.getItem('themeDark');
+  applyTheme(savedColor); if(f)document.body.style.fontFamily=f;
+  if(d==='true'){document.body.classList.add('bg-gray-900','text-gray-100');
+    document.body.classList.remove('bg-gray-100','text-gray-800');darkToggle.checked=true;}
+  colorSelect.value=savedColor; if(f)fontSelect.value=f; updateDashboard();
+});
+function applyTheme(color){
+  document.body.classList.remove('theme-blue','theme-green','theme-purple','theme-amber','theme-red','theme-pink');
+  document.body.classList.add('theme-'+color);
+}
+saveTheme.onclick=function(){
+  const c=colorSelect.value,f=fontSelect.value,d=darkToggle.checked;
+  localStorage.setItem('themeColor',c);localStorage.setItem('themeFont',f);localStorage.setItem('themeDark',d);
+  applyTheme(c);document.body.style.fontFamily=f;
+  if(d){document.body.classList.add('bg-gray-900','text-gray-100');document.body.classList.remove('bg-gray-100','text-gray-800');}
+  else{document.body.classList.add('bg-gray-100','text-gray-800');document.body.classList.remove('bg-gray-900','text-gray-100');}
+  themePanel.style.display='none';
+};
+const featureModal=document.getElementById('featureModal'),featureContent=document.getElementById('featureContent');
+function showFeature(type){
+  let html='<button id="closeFeatureBtn" onclick="closeFeature()">&times;</button>';
+  if(type==='timetable'){html+=`<div>
+    <h2 class="text-2xl font-bold mb-2">📅 Timetable Generator</h2>
+    <p class="mb-4">Create and manage your weekly class schedule.</p>
+    <div class="space-y-2 mb-4">
+      <div><label>Subject Name:</label><input type="text" id="subjectName" class="w-full px-3 py-2"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label>Day:</label><select id="daySelect" class="w-full px-3 py-2">
+          <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+          <option>Thursday</option><option>Friday</option></select></div>
+        <div><label>Time:</label><input type="time" id="timeInput" class="w-full px-3 py-2"></div>
+      </div>
+      <button class="add-timetable-btn btn-primary px-4 py-2 w-full">Add to Timetable</button>
+    </div>
+    <div class="saved-items"><h3 class="font-bold mb-2">Your Timetable:</h3>
+      <div id="timetableList">${renderTimetableItems()}</div></div>
+  </div>`;}
+  else if(type==='qr'){html+=`<div>
+    <h2 class="text-2xl font-bold mb-2">📱 QR Generator</h2>
+    <p class="mb-4">Generate QR codes for links, events, or text.</p>
+    <div class="space-y-2 mb-4">
+      <div><label>Content Type:</label>
+        <select id="qrType" class="w-full px-3 py-2">
+          <option>Website URL</option><option>Text Message</option>
+          <option>Event Details</option><option>Contact Info</option>
+        </select></div>
+      <div><label>Content:</label>
+        <textarea id="qrContent" class="w-full px-3 py-2" rows="2"></textarea>
+      </div>
+      <button class="generate-qr-btn btn-primary px-4 py-2 w-full">Generate QR Code</button>
+    </div>
+    <div id="qrResult" class="qr-container hidden">
+      <h4 class="font-bold mb-2">Generated QR Code:</h4>
+      <div id="qrDisplay"></div>
+      <button class="download-btn" onclick="downloadQR()">Download QR Code</button>
+    </div></div>`;}
+  else if(type==='lostfound'){html+=`<div>
+    <h2 class="text-2xl font-bold mb-2">🔍 Lost & Found</h2>
+    <p class="mb-4">Report lost items or help others find their belongings.</p>
+    <div class="space-y-2 mb-4">
+      <div class="grid grid-cols-2 gap-3">
+        <button class="report-lost-btn btn-primary px-4 py-2">Report Lost</button>
+        <button class="report-found-btn btn-primary px-4 py-2">Report Found</button>
+      </div>
+      <div><label>Item Description:</label><input type="text" id="itemDesc" class="w-full px-3 py-2"></div>
+      <div><label>Location:</label><input type="text" id="itemLocation" class="w-full px-3 py-2"></div>
+      <div><label>Contact:</label><input type="text" id="itemContact" class="w-full px-3 py-2"></div>
+    </div>
+    <div class="saved-items"><h3 class="font-bold mb-2">Recent Reports:</h3>
+      <div id="lostFoundList">${renderLostFoundItems()}</div></div>
+  </div>`;}
+  else if(type==='noticeboard'){html+=`<div>
+    <h2 class="text-2xl font-bold mb-2">📢 Notice Board</h2>
+    <p class="mb-4">Post announcements or view campus notices.</p>
+    <div class="space-y-2 mb-4">
+      <div><label>Notice Title:</label><input type="text" id="noticeTitle" class="w-full px-3 py-2"></div>
+      <div><label>Category:</label>
+        <select id="noticeCategory" class="w-full px-3 py-2">
+          <option>General</option><option>Academic</option>
+          <option>Events</option><option>Sports</option><option>Emergency</option>
+        </select></div>
+      <div><label>Message:</label>
+        <textarea id="noticeMessage" class="w-full px-3 py-2" rows="2"></textarea>
+      </div>
+      <button class="post-notice-btn btn-primary px-4 py-2 w-full">Post Notice</button>
+    </div>
+    <div class="saved-items"><h3 class="font-bold mb-2">Recent Notices:</h3>
+      <div id="noticeList">${renderNoticeItems()}</div></div>
+  </div>`;}
+  featureContent.innerHTML=html;featureModal.style.display='flex';
+}
+function closeFeature(){featureModal.style.display='none';}
+function downloadQR(){const canvas=document.querySelector('#qrDisplay canvas');
+  if(canvas){const link=document.createElement('a');link.download='qr-code.png';link.href=canvas.toDataURL();link.click();}
+}
+function renderTimetableItems(){return timetableItems.map((item,idx)=>
+  `<div class="saved-item"><span><strong>${item.subject}</strong> - ${item.day} at ${item.time}</span>
+  <button class="delete-btn" data-type="timetable" data-index="${idx}">Delete</button></div>`).join('');
+}
+function renderLostFoundItems(){return lostFoundItems.map((item,idx)=>
+  `<div class="saved-item"><span><strong>[${item.type}]</strong> ${item.description} - ${item.location}</span>
+  <button class="delete-btn" data-type="lostfound" data-index="${idx}">Delete</button></div>`).join('');
+}
+function renderNoticeItems(){return noticeItems.map((item,idx)=>
+  `<div class="saved-item"><span><strong>[${item.category}]</strong> ${item.title}</span>
+  <button class="delete-btn" data-type="notice" data-index="${idx}">Delete</button></div>`).join('');
+}
+document.addEventListener('click',function(event){
+  if(event.target.classList.contains('add-timetable-btn')){
+    const subject=document.getElementById('subjectName').value.trim(),day=document.getElementById('daySelect').value,time=document.getElementById('timeInput').value;
+    if(subject&&time){timetableItems.push({subject,day,time,date:new Date().toLocaleDateString()});
+      localStorage.setItem('timetable',JSON.stringify(timetableItems));
+      document.getElementById('timetableList').innerHTML=renderTimetableItems();
+      document.getElementById('subjectName').value='';document.getElementById('timeInput').value='';
+      alert('Added to timetable!');updateDashboard();
+    }else alert('Fill in subject & time');
+  }
+  if(event.target.classList.contains('generate-qr-btn')){
+    const content=document.getElementById('qrContent').value.trim();
+    if(content){const qrDisplay=document.getElementById('qrDisplay');qrDisplay.innerHTML='';
+      new QRCode(qrDisplay,{text:content,width:180,height:180,colorDark:'#000',colorLight:'#FFF'});
+      qrCount++;localStorage.setItem('qrCount',qrCount.toString());
+      document.getElementById('qrResult').classList.remove('hidden');updateDashboard();
+      document.getElementById('qrContent').value='';
+    }else alert('Enter content for QR');
+  }
+  if(event.target.classList.contains('report-lost-btn')||event.target.classList.contains('report-found-btn')){
+    const type=event.target.classList.contains('report-lost-btn')?'Lost':'Found',
+      description=document.getElementById('itemDesc').value.trim(),
+      location=document.getElementById('itemLocation').value.trim(),
+      contact=document.getElementById('itemContact').value.trim();
+    if(description&&location&&contact){
+      lostFoundItems.push({type,description,location,contact,date:new Date().toLocaleDateString()});
+      localStorage.setItem('lostfound',JSON.stringify(lostFoundItems));
+      document.getElementById('lostFoundList').innerHTML=renderLostFoundItems();
+      document.getElementById('itemDesc').value='';document.getElementById('itemLocation').value='';document.getElementById('itemContact').value='';
+      alert(type+' item reported!');updateDashboard();
+    }else alert('Fill in all fields');
+  }
+  if(event.target.classList.contains('post-notice-btn')){
+    const title=document.getElementById('noticeTitle').value.trim(),
+      category=document.getElementById('noticeCategory').value,
+      message=document.getElementById('noticeMessage').value.trim();
+    if(title&&message){
+      noticeItems.push({title,category,message,date:new Date().toLocaleDateString()});
+      localStorage.setItem('notices',JSON.stringify(noticeItems));
+      document.getElementById('noticeList').innerHTML=renderNoticeItems();
+      document.getElementById('noticeTitle').value='';document.getElementById('noticeMessage').value='';
+      alert('Notice posted!');updateDashboard();
+    }else alert('Title & Message required!');
+  }
+  if(event.target.classList.contains('delete-btn')){
+    const type=event.target.dataset.type,idx=parseInt(event.target.dataset.index);
+    if(type==='timetable'){
+      timetableItems.splice(idx,1);localStorage.setItem('timetable',JSON.stringify(timetableItems));
+      document.getElementById('timetableList').innerHTML=renderTimetableItems();
+    }else if(type==='lostfound'){
+      lostFoundItems.splice(idx,1);localStorage.setItem('lostfound',JSON.stringify(lostFoundItems));
+      document.getElementById('lostFoundList').innerHTML=renderLostFoundItems();
+    }else if(type==='notice'){
+      noticeItems.splice(idx,1);localStorage.setItem('notices',JSON.stringify(noticeItems));
+      document.getElementById('noticeList').innerHTML=renderNoticeItems();
+    }updateDashboard();
+  }
+});
+featureModal.onclick=function(event){if(event.target===featureModal)closeFeature();}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeFeature();});
+document.addEventListener('DOMContentLoaded',function(){updateDashboard();});
+</script>
+</body>
+</html>
