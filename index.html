@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CampusConnect Pretty Theme</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --fg: #1f2937;
+      --accent: #3b82f6;
+      --accent-dark: #1d4ed8;
+      --card-bg: #ffffff;
+      --card-border: #e5e7eb;
+    }
+    .theme-blue {
+      --bg: #f3f4f6; --fg: #1f2937;
+      --accent: #3b82f6; --accent-dark: #1d4ed8;
+      --card-bg: #fff; --card-border: #93c5fd;
+    }
+    .theme-green {
+      --bg: #ecfdf5; --fg: #065f46;
+      --accent: #10b981; --accent-dark: #047857;
+      --card-bg: #fff; --card-border: #6ee7b7;
+    }
+    .theme-purple {
+      --bg: #faf5ff; --fg: #4c1d95;
+      --accent: #8b5cf6; --accent-dark: #7c3aed;
+      --card-bg: #fff; --card-border: #c4b5fd;
+    }
+    .theme-amber {
+      --bg: #fff7ed; --fg: #92400e;
+      --accent: #f59e0b; --accent-dark: #b45309;
+      --card-bg: #fff; --card-border: #fde68a;
+    }
+    .theme-red {
+      --bg: #fef2f2; --fg: #991b1b;
+      --accent: #ef4444; --accent-dark: #dc2626;
+      --card-bg: #fff; --card-border: #fecaca;
+    }
+    .theme-pink {
+      --bg: #fdf2f8; --fg: #831843;
+      --accent: #ec4899; --accent-dark: #be185d;
+      --card-bg: #fff; --card-border: #f9a8d4;
+    }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      font-family: Inter, Poppins, Roboto, Georgia, serif;
+      transition: background 0.3s, color 0.3s;
+    }
+    .theme-button {
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--accent); color: #fff; border-radius: 50%;
+      width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 1.5rem; cursor:pointer;
+      transition: all 0.3s ease;
+    }
+    .theme-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+    .theme-panel {
+      position:fixed; bottom:80px; right:20px;
+      background:var(--card-bg); color:var(--fg); border-radius:1rem; padding:1rem;
+      display:none; z-index:100; width:235px; border:1px solid var(--card-border);
+      box-shadow:0 4px 12px rgba(0,0,0,0.11);
+    }
+    /* Chatbot Styles */
+    .chatbot-button {
+      position: fixed; bottom: 85px; right: 20px;
+      background: var(--accent); color: #fff; border-radius: 50%;
+      width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 1.25rem; cursor:pointer;
+      transition: all 0.3s ease; z-index: 150;
+    }
+    .chatbot-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+    .chatbot-modal {
+      position: fixed; bottom: 150px; right: 20px;
+      width: 380px; max-width: calc(100vw - 40px); height: 500px;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 1rem; box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      z-index: 200; display: none; flex-direction: column;
+    }
+    .chatbot-header {
+      background: var(--accent); color: white; padding: 1rem;
+      font-weight: bold; border-top-left-radius: 1rem; border-top-right-radius: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .chatbot-close {
+      background: none; border: none; color: white;
+      font-size: 1.5rem; cursor: pointer; padding: 0;
+    }
+    .chatbot-messages {
+      flex-grow: 1; padding: 1rem; overflow-y: auto;
+      font-size: 0.85rem; color: var(--fg); max-height: 350px;
+    }
+    .chatbot-input-area {
+      padding: 1rem; border-top: 1px solid var(--card-border);
+      display: flex; gap: 0.5rem;
+    }
+    .chatbot-input {
+      flex-grow: 1; padding: 0.5rem; border: 1px solid var(--card-border);
+      border-radius: 0.5rem; outline: none; font-family: inherit;
+    }
+    .chatbot-send {
+      background: var(--accent); color: white; border: none;
+      padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .chatbot-send:hover {
+      background: var(--accent-dark);
+    }
+    .chat-message {
+      margin-bottom: 0.8rem; padding: 0.5rem 0.75rem;
+      border-radius: 0.75rem; max-width: 85%; word-wrap: break-word;
+      line-height: 1.4;
+    }
+    .chat-message.user {
+      background: var(--accent); color: white;
+      margin-left: auto; text-align: right;
+    }
+    .chat-message.ai {
+      background: var(--card-border); color: var(--fg);
+      margin-right: auto;
+    }
+    .typing-indicator {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 0.75rem; margin-bottom: 0.8rem;
+      background: var(--card-border); border-radius: 0.75rem;
+      max-width: 85%; margin-right: auto; font-style: italic;
+      color: var(--fg);
+    }
+    .typing-dots {
+      display: flex; gap: 0.2rem;
+    }
+    .typing-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); animation: typing 1.5s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.3s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes typing {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(1); }
+      30% { opacity: 1; transform: scale(1.2); }
+    }
+    .nav-tabs {
+      display:flex; border-bottom:2px solid var(--card-border);
+      background:var(--card-bg); margin-bottom:2rem;
+    }
+    .nav-tab { padding:0.8rem 1.6rem; cursor:pointer; color:var(--fg);
+      border-bottom:2px solid transparent; transition:.2s;}
+    .nav-tab.active { border-bottom:2px solid var(--accent); color:var(--accent);}
+    .main-content { display:none;}
+    .main-content.active {display:block;}
+    .feature-card,.stat-card,.saved-item,#themePanel,.qr-container {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 0.8rem; transition:.3s;
+    }
+    .feature-card {padding:1.2rem;}
+    .feature-card:hover {box-shadow:0 6px 22px rgba(0,0,0,0.09); cursor: pointer;}
+    .stat-card {
+      background:var(--accent); color:#fff; box-shadow:0 0 10px rgba(0,0,0,0.10);
+      margin-bottom:1.4rem;
+    }
+    .btn-primary {
+      background: var(--accent) !important; color: #fff !important;
+      border: none; border-radius:0.5rem; transition:.2s;
+    }
+    .btn-primary:hover {background:var(--accent-dark) !important;}
+    .saved-item {display:flex;justify-content:space-between;align-items:center;padding:0.6rem;}
+    .delete-btn {background:var(--accent);color:#fff;border:none;border-radius:0.3rem;padding:0.2rem 0.7rem;cursor:pointer;}
+    .delete-btn:hover {background:var(--accent-dark);}
+    input,select,textarea {border:1px solid var(--card-border);border-radius:0.4rem;}
+    input,select,textarea,button {font-family:inherit;}
+    .qr-container {padding:1rem;}
+    .download-btn {background:var(--accent); color:#fff;border:none;border-radius:0.4rem;padding:0.4rem 1rem;margin-top:0.7rem;}
+    .download-btn:hover {background:var(--accent-dark);}
+    #featureModal {display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.09);align-items:center;justify-content:center;z-index:200;}
+    #featureContent {background:var(--card-bg);padding:2rem;border-radius:1rem;max-width:420px;width:calc(100vw - 3rem);box-shadow:0 8px 24px rgba(0,0,0,0.13);color:var(--fg);}
+    #closeFeatureBtn { float:right; font-size:2rem; color:var(--accent); background:none;border:none;cursor:pointer;}
+  </style>
+</head>
+<body class="theme-blue">
+<div class="bg-white shadow-sm">
+  <div class="max-w-6xl mx-auto">
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="showTab('dashboard')">📊 Dashboard</div>
+      <div class="nav-tab" onclick="showTab('features')">🏠 Features</div>
+    </div>
+  </div>
+</div>
+
+<div id="dashboard" class="main-content active">
+  <div class="p-8">
+    <h1 class="text-3xl font-bold mb-2">CampusConnect Dashboard</h1>
+    <p class="mb-8">Overview of your campus activities and saved data</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="stat-card p-6"><div class="flex items-center justify-between">
+        <div><p>Timetable Entries</p><p id="timetableCount" class="text-3xl font-bold">0</p></div><div class="text-4xl">📅</div></div></div>
+      <div class="stat-card p-6"><div class="flex items-center justify-between">
+        <div><p>QR Codes Gen.</p><p id="qrCount" class="text-3xl font-bold">0</p></div><div class="text-4xl">📱</div></div></div>
+      <div class="stat-card p-6"><div class="flex items-center justify-between">
+        <div><p>Lost & Found</p><p id="lostFoundCount" class="text-3xl font-bold">0</p></div><div class="text-4xl">🔍</div></div></div>
+      <div class="stat-card p-6"><div class="flex items-center justify-between">
+        <div><p>Notices Posted</p><p id="noticesCount" class="text-3xl font-bold">0</p></div><div class="text-4xl">📢</div></div></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="feature-card">
+        <h3 class="text-xl font-bold mb-4">📅 Recent Timetable Entries</h3>
+        <div id="recentTimetable"><p class="text-gray-500 text-center py-4">No timetable entries yet</p></div>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-xl font-bold mb-4">🔍 Recent Lost & Found</h3>
+        <div id="recentLostFound"><p class="text-gray-500 text-center py-4">No reports yet</p></div>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-xl font-bold mb-4">📢 Recent Notices</h3>
+        <div id="recentNotices"><p class="text-gray-500 text-center py-4">No notices posted yet</p></div>
+      </div>
+      <div class="feature-card">
+        <h3 class="text-xl font-bold mb-4">⚡ Quick Actions</h3>
+        <div class="space-y-3">
+          <button class="w-full btn-primary p-3" onclick="showTab('features');showFeature('timetable')">📅 Add Timetable Entry</button>
+          <button class="w-full btn-primary p-3" onclick="showTab('features');showFeature('qr')">📱 Generate QR Code</button>
+          <button class="w-full btn-primary p-3" onclick="showTab('features');showFeature('lostfound')">🔍 Report Lost Item</button>
+          <button class="w-full btn-primary p-3" onclick="showTab('features');showFeature('noticeboard')">📢 Post Notice</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="features" class="main-content">
+  <div class="p-10 text-center">
+    <h1 class="text-3xl font-bold mb-4">CampusConnect Features</h1>
+    <p class="mb-8">Explore your campus dashboard tools and utilities</p>
+  </div>
+  <div class="max-w-4xl mx-auto mt-8 px-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+      <div class="feature-card" onclick="showFeature('timetable')">
+        <div class="text-2xl mb-3">📅</div>
+        <h3 class="font-bold text-xl mb-2">Timetable Generator</h3>
+        <p>Create and manage your class timetable.</p>
+      </div>
+      <div class="feature-card" onclick="showFeature('qr')">
+        <div class="text-2xl mb-3">📱</div>
+        <h3 class="font-bold text-xl mb-2">QR Generator</h3>
+        <p>Generate QR codes for events or resources.</p>
+      </div>
+      <div class="feature-card" onclick="showFeature('lostfound')">
+        <div class="text-2xl mb-3">🔍</div>
+        <h3 class="font-bold text-xl mb-2">Lost & Found</h3>
+        <p>Report or find lost items on campus.</p>
+      </div>
+      <div class="feature-card" onclick="showFeature('noticeboard')">
+        <div class="text-2xl mb-3">📢</div>
+        <h3 class="font-bold text-xl mb-2">Notice Board</h3>
+        <p>View or post campus-wide notices.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feature Modal -->
+<div id="featureModal"><div id="featureContent"></div></div>
+
+<!-- Theme Settings -->
+<div id="themeBtn" class="theme-button">⚙️</div>
+<div id="themePanel" class="theme-panel">
+  <h2 class="text-lg font-semibold mb-2">🎨 Theme Settings</h2>
+  <div>
+    <label class="block text-sm">Primary Color:</label>
+    <select id="colorSelect" class="w-full border rounded p-1 mb-2">
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+      <option value="purple">Purple</option>
+      <option value="amber">Amber</option>
+      <option value="red">Red</option>
+      <option value="pink">Pink</option>
+    </select>
+  </div>
+  <div>
+    <label class="block text-sm">Font:</label>
+    <select id="fontSelect" class="w-full border rounded p-1 mb-2">
+      <option value="Inter, sans-serif">Inter</option>
+      <option value="Poppins, sans-serif">Poppins</option>
+      <option value="Roboto, sans-serif">Roboto</option>
+      <option value="Georgia, serif">Georgia</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2 mb-2">
+    <label class="text-sm">🌙 Dark Mode:</label>
+    <input type="checkbox" id="darkToggle">
+  </div>
+  <button id="saveTheme" class="btn-primary px-3 py-1 w-full">Save</button>
+</div>
+
+<!-- Enhanced Smart AI Study Assistant -->
+<div id="chatbotBtn" class="chatbot-button">🤖</div>
+<div id="chatbotModal" class="chatbot-modal">
+  <div class="chatbot-header">
+    <span>📚 Smart Study Assistant</span>
+    <button id="chatbotClose" class="chatbot-close">&times;</button>
+  </div>
+  <div id="chatbotMessages" class="chatbot-messages">
+    <div class="chat-message ai">
+      Hello! 👋 I'm your Smart Study Assistant! I can help you with:<br>
+      📚 Study techniques & methods<br>
+      📝 Note-taking strategies<br>
+      🎯 Concentration & focus tips<br>
+      📖 Academic resources & materials<br>
+      ⏰ Time management<br>
+      🧠 Memory improvement<br><br>
+      Ask me anything about studying better!
+    </div>
+  </div>
+  <div class="chatbot-input-area">
+    <input type="text" id="chatbotInput" class="chatbot-input" placeholder="Ask about study tips, notes, resources..." maxlength="500">
+    <button id="chatbotSend" class="chatbot-send">Send</button>
+  </div>
+</div>
+
+<script>
+// Global variables
+let timetableItems = JSON.parse(localStorage.getItem('timetable')||'[]');
+let lostFoundItems = JSON.parse(localStorage.getItem('lostfound')||'[]');
+let noticeItems = JSON.parse(localStorage.getItem('notices')||'[]');
+let qrCount = parseInt(localStorage.getItem('qrCount')||'0');
+let chatHistory = [];
+
+// Enhanced Smart Study Assistant Knowledge Base
+const chatbotResponses = {
+  // Greetings
+  greetings: {
+    keywords: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings'],
+    responses: [
+      "Hello! 👋 I'm your Smart Study Assistant. I can help you study better, take effective notes, improve concentration, and find great resources! How can I assist you today?",
+      "Hi there! 😊 Ready to boost your academic performance with proven study techniques and helpful resources!",
+      "Hey! Welcome to your personal study companion. I'm here to help with everything from note-taking to exam prep. What would you like to learn?",
+      "Greetings! I specialize in study strategies, concentration techniques, and academic success. What study challenge can I help you solve?"
+    ]
+  },
+
+  // How to study better - Comprehensive techniques
+  studyBetter: {
+    keywords: ['how to study better', 'study better', 'improve studying', 'study effectively', 'study tips', 'better studying', 'study methods', 'study techniques'],
+    responses: [
+      "📚 **Proven Study Techniques:**\n\n🎯 **Active Learning Methods:**\n• Pomodoro Technique (25min study + 5min break)\n• Active recall - test yourself frequently\n• Spaced repetition - review at increasing intervals\n• Feynman Technique - explain concepts simply\n\n🧠 **Memory Enhancement:**\n• Create visual associations & mnemonics\n• Use mind maps and diagrams\n• Practice retrieval instead of re-reading\n• Teach concepts to others\n\n⏰ **Time Management:**\n• Plan study sessions in advance\n• Break large topics into chunks\n• Set specific, achievable goals\n• Use deadlines to stay focused",
+      
+      "🏆 **Effective Study Strategies:**\n\n📖 **Pre-Study Preparation:**\n• Review previous material first\n• Set clear objectives for each session\n• Gather all materials beforehand\n• Choose optimal study environment\n\n💡 **During Study:**\n• Take notes while reading\n• Ask questions and seek answers\n• Connect new info to prior knowledge\n• Use multiple learning modalities\n\n✅ **Post-Study Review:**\n• Summarize key points\n• Test your understanding\n• Identify areas needing more work\n• Plan next study session",
+      
+      "🚀 **Advanced Study Methods:**\n\n🔄 **Spaced Repetition System:**\n• Review after 1 day, then 3 days, then 1 week\n• Use flashcard apps like Anki\n• Focus on difficult concepts more often\n\n🎨 **Multi-Modal Learning:**\n• Read (visual), discuss (auditory), practice (kinesthetic)\n• Create diagrams, charts, and infographics\n• Record voice notes and listen back\n• Use colors and highlighting strategically\n\n🧪 **Self-Testing Techniques:**\n• Practice past papers regularly\n• Create your own quiz questions\n• Explain concepts without notes\n• Use the rubber duck method"
+    ]
+  },
+
+  // Note-taking methods
+  noteTaking: {
+    keywords: ['how to make notes', 'note taking', 'taking notes', 'make notes', 'note methods', 'notes techniques', 'better notes', 'effective notes'],
+    responses: [
+      "📝 **Effective Note-Taking Methods:**\n\n🏛️ **Cornell Note-Taking System:**\n• Divide page into 3 sections\n• Notes (right), Cues (left), Summary (bottom)\n• Great for lectures and textbooks\n• Easy to review and test yourself\n\n🗺️ **Mind Mapping:**\n• Central topic in the middle\n• Branch out to subtopics\n• Use colors, images, keywords\n• Perfect for visual learners\n\n📋 **Outline Method:**\n• Hierarchical structure with main points\n• Use bullet points and numbering\n• Great for organized content\n• Easy to see relationships",
+      
+      "✍️ **Digital vs Paper Notes:**\n\n💻 **Digital Notes Benefits:**\n• Easy to search and organize\n• Can include multimedia (audio, images)\n• Cloud sync across devices\n• Tools: Notion, Obsidian, OneNote\n\n📄 **Paper Notes Benefits:**\n• Better retention and comprehension\n• No digital distractions\n• Freedom to draw and sketch\n• Tactile learning experience\n\n🎯 **Best Practices:**\n• Use abbreviations and symbols\n• Leave white space for additions\n• Review and revise notes within 24 hours\n• Color code different subjects/topics",
+      
+      "🔥 **Advanced Note-Taking Tips:**\n\n⚡ **During Lectures:**\n• Listen first, then write key points\n• Don't try to write everything\n• Use shorthand and symbols\n• Mark unclear areas to clarify later\n\n📚 **From Textbooks:**\n• Skim chapter first for overview\n• Focus on headings and summaries\n• Write in your own words\n• Include page numbers for reference\n\n🔗 **Connection Techniques:**\n• Link new info to previous knowledge\n• Use arrows and lines to show relationships\n• Create concept maps\n• Write questions in margins"
+    ]
+  },
+
+  // Concentration and focus
+  concentration: {
+    keywords: ['how to concentrate', 'concentration', 'focus', 'focusing', 'attention', 'distracted', 'cant focus', 'improve focus'],
+    responses: [
+      "🎯 **Concentration Enhancement Techniques:**\n\n🧘 **Mental Focus Methods:**\n• Deep breathing exercises before studying\n• Meditation (even 5-10 minutes helps)\n• Single-tasking instead of multitasking\n• Set clear intentions for study sessions\n\n🏠 **Environment Optimization:**\n• Find a quiet, dedicated study space\n• Good lighting and comfortable temperature\n• Remove distractions (phone, social media)\n• Use noise-canceling headphones if needed\n\n⏰ **Time-Based Techniques:**\n• Pomodoro Technique (25min focus + 5min break)\n• Time-blocking for different subjects\n• Study during your peak energy hours\n• Take regular breaks to prevent burnout",
+      
+      "🚫 **Eliminating Distractions:**\n\n📱 **Digital Distractions:**\n• Use app blockers (Freedom, Cold Turkey)\n• Turn phone to airplane mode\n• Use website blockers for social media\n• Keep phone in another room\n\n🧠 **Mental Distractions:**\n• Write down worrying thoughts to address later\n• Use the '2-minute rule' for quick tasks\n• Practice mindfulness techniques\n• Set specific worry time outside study hours\n\n🎵 **Audio Environment:**\n• Try instrumental music or nature sounds\n• White noise or brown noise\n• Complete silence if that works better\n• Experiment to find your optimal audio",
+      
+      "💪 **Building Concentration Stamina:**\n\n🏃 **Progressive Training:**\n• Start with shorter focused sessions\n• Gradually increase duration\n• Track your progress daily\n• Reward yourself for improvements\n\n🔋 **Energy Management:**\n• Get adequate sleep (7-9 hours)\n• Exercise regularly for better brain function\n• Eat brain-healthy foods (nuts, berries, fish)\n• Stay hydrated throughout the day\n\n🎯 **Focus Triggers:**\n• Create a pre-study routine\n• Use the same study location\n• Set visual cues in your environment\n• Practice the same start-up ritual"
+    ]
+  },
+
+  // Study resources with the Google Drive link
+  resources: {
+    keywords: ['study material', 'resources', 'study resources', 'materials', 'books', 'where to study', 'learning resources', 'study help'],
+    responses: [
+      "📚 **Comprehensive Study Resources:**\n\n🎓 **Our Complete Study Drive:**\nhttps://drive.google.com/drive/folders/1XqCEUGn1bc1xOLt69r8xAhEO5xG1NXu7\n\n✨ **What's included:**\n• Previous Year Questions (PYQs)\n• Tutorial sheets and practice problems\n• Lecture notes from top professors\n• PowerPoint presentations (PPTs)\n• Reference materials and guides\n• Exam preparation resources\n\n📖 **Additional Online Resources:**\n• Khan Academy (free video tutorials)\n• Coursera & edX (university courses)\n• YouTube educational channels\n• MIT OpenCourseWare\n• Library databases and journals",
+      
+      "🔗 **Access Our Study Materials:**\n\n📁 **Google Drive Link:**\nhttps://drive.google.com/drive/folders/1XqCEUGn1bc1xOLt69r8xAhEO5xG1NXu7\n\n📋 **Contents:**\n✅ Previous Year Questions (PYQs) - all subjects\n✅ Tutorial sheets with solutions\n✅ Comprehensive lecture notes\n✅ PowerPoint presentations\n✅ Reference books and guides\n✅ Practice tests and mock exams\n✅ Formula sheets and quick references\n\n💡 **How to use effectively:**\n• Start with lecture notes for understanding\n• Practice with tutorial sheets\n• Test yourself with PYQs\n• Review PPTs for quick revision",
+      
+      "🌟 **Complete Academic Resource Hub:**\n\n🎯 **Main Study Drive:**\nhttps://drive.google.com/drive/folders/1XqCEUGn1bc1xOLt69r8xAhEO5xG1NXu7\n\n📚 **Everything you need:**\n• 📝 Detailed lecture notes\n• 🎨 Interactive PPT presentations\n• 📊 Tutorial sheets with step-by-step solutions\n• 🎓 Previous year question papers\n• 📖 Reference materials and textbooks\n• 🧪 Lab manuals and practical guides\n\n🚀 **Study Strategy:**\n1. Read lecture notes first\n2. Go through PPTs for visual learning\n3. Practice tutorial sheets\n4. Solve PYQs for exam prep\n5. Use reference materials for deep understanding"
+    ]
+  },
+
+  // Memory and retention
+  memory: {
+    keywords: ['memory', 'remember', 'memorize', 'retention', 'forget', 'recall', 'memorization'],
+    responses: [
+      "🧠 **Memory Enhancement Techniques:**\n\n🔗 **Association Methods:**\n• Link new info to things you already know\n• Create vivid mental images\n• Use acronyms and mnemonics\n• Tell stories to remember sequences\n\n🎨 **Visual Memory Aids:**\n• Create colorful mind maps\n• Use diagrams and flowcharts\n• Draw concepts when possible\n• Use the method of loci (memory palace)\n\n🔄 **Spaced Repetition:**\n• Review material at increasing intervals\n• Use flashcard systems like Anki\n• Test yourself regularly\n• Focus more on difficult material",
+      
+      "💡 **Memory Improvement Strategies:**\n\n🏃 **Physical Enhancement:**\n• Exercise regularly for better brain function\n• Get adequate sleep (crucial for memory consolidation)\n• Eat brain-healthy foods (omega-3, antioxidants)\n• Stay hydrated throughout the day\n\n🧘 **Mental Techniques:**\n• Practice mindfulness meditation\n• Reduce stress levels\n• Focus on understanding, not just memorizing\n• Use multiple senses when learning\n\n📚 **Study Methods for Better Retention:**\n• Teach concepts to others\n• Create your own examples\n• Connect new material to personal experiences\n• Use the testing effect - quiz yourself frequently"
+    ]
+  },
+
+  // Time management
+  timeManagement: {
+    keywords: ['time management', 'manage time', 'schedule', 'planning', 'organize', 'productivity', 'procrastination'],
+    responses: [
+      "⏰ **Effective Time Management:**\n\n📅 **Planning Strategies:**\n• Use a weekly planner or calendar\n• Time-block your study sessions\n• Set specific goals for each session\n• Prioritize tasks using Eisenhower Matrix\n\n🎯 **Daily Routine:**\n• Plan your day the night before\n• Start with most important/difficult tasks\n• Use the 2-minute rule for quick tasks\n• Schedule breaks and rewards\n\n🚫 **Beating Procrastination:**\n• Break large tasks into smaller steps\n• Use the 5-minute rule to start\n• Eliminate distractions before starting\n• Set deadlines and stick to them",
+      
+      "🏆 **Productivity Techniques:**\n\n⚡ **Time-Boxing Methods:**\n• Pomodoro Technique (25min work + 5min break)\n• Time-blocking for different subjects\n• Batch similar tasks together\n• Use timers to stay on track\n\n📊 **Priority Management:**\n• Identify your peak energy hours\n• Do hardest subjects when most alert\n• Use ABCD method for task importance\n• Review and adjust plans regularly\n\n🎨 **Work-Life Balance:**\n• Schedule downtime and hobbies\n• Set boundaries for study hours\n• Include physical activity in your routine\n• Maintain social connections"
+    ]
+  },
+
+  // Exam preparation
+  examPrep: {
+    keywords: ['exam preparation', 'exam prep', 'test preparation', 'prepare for exam', 'exam tips', 'exam strategy'],
+    responses: [
+      "📋 **Comprehensive Exam Preparation:**\n\n📚 **Study Schedule:**\n• Start preparing at least 3-4 weeks before\n• Create a detailed study timetable\n• Allocate more time to difficult subjects\n• Include regular revision sessions\n\n📝 **Practice Strategy:**\n• Solve previous year questions (check our drive!)\n• Take mock tests under exam conditions\n• Practice time management during tests\n• Review and learn from mistakes\n\n🎯 **Focus Areas:**\n• Identify high-weightage topics\n• Make formula sheets and quick references\n• Practice numerical problems regularly\n• Prepare short notes for last-minute revision",
+      
+      "🔥 **Exam Success Tips:**\n\n📖 **Content Mastery:**\n• Understand concepts, don't just memorize\n• Create summary notes for each topic\n• Use our drive resources for PYQs and notes\n• Form study groups for discussion\n\n🧘 **Mental Preparation:**\n• Practice relaxation techniques\n• Maintain a positive mindset\n• Get adequate sleep before exams\n• Plan your exam day schedule\n\n✍️ **During the Exam:**\n• Read all instructions carefully\n• Manage time for each section\n• Start with questions you're confident about\n• Review answers if time permits"
+    ]
+  },
+
+  // Campus tools (existing functionality)
+  timetable: {
+    keywords: ['timetable', 'schedule', 'class schedule', 'time table', 'classes', 'class timing'],
+    responses: [
+      "I can help you with your timetable! 📅 You can create and manage your class schedule using our Timetable Generator. Would you like me to guide you there?",
+      "Need help with your class schedule? The Timetable Generator lets you add subjects, days, and times. Click on Features > Timetable Generator to get started!",
+      "Managing your timetable is easy! 📚 You can add, view, and organize all your classes. Want me to show you how?"
+    ]
+  },
+
+  qr: {
+    keywords: ['qr code', 'qr generator', 'generate qr', 'qr', 'code generator'],
+    responses: [
+      "Need a QR code? 📱 I can help you generate QR codes for websites, text, events, or contact info. Check out our QR Generator tool!",
+      "The QR Generator is perfect for creating codes for events or sharing information quickly! Want to try it out?",
+      "Creating QR codes is super easy! 🎯 You can generate them for URLs, messages, events, and more. Shall I guide you there?"
+    ]
+  },
+
+  lostfound: {
+    keywords: ['lost', 'found', 'lost item', 'lost and found', 'missing', 'find item'],
+    responses: [
+      "Lost something or found an item? 🔍 Our Lost & Found feature helps connect students with their belongings. You can report lost or found items there!",
+      "The Lost & Found section is great for reuniting students with their items! You can post what you've lost or help others by reporting found items.",
+      "Missing something important? 😟 Don't worry! Use our Lost & Found feature to report it and get help from other students."
+    ]
+  },
+
+  notices: {
+    keywords: ['notice', 'announcement', 'notice board', 'post notice', 'campus news'],
+    responses: [
+      "Want to stay updated or share news? 📢 The Notice Board is perfect for campus announcements, events, and important updates!",
+      "Keep up with campus life through our Notice Board! You can view recent notices or post your own announcements.",
+      "The Notice Board keeps everyone connected! 📣 Perfect for academic updates, event announcements, and general campus news."
+    ]
+  },
+
+  // Academic subjects
+  math: {
+    keywords: ['math', 'mathematics', 'calculus', 'algebra', 'geometry', 'statistics', 'equations'],
+    responses: [
+      "Mathematics is fascinating! 📊 For comprehensive math resources, check our study drive with tutorial sheets and practice problems. Break complex problems into steps and practice regularly!",
+      "Math success comes from consistent practice! 🔢 Our drive has excellent math resources including PYQs and detailed solutions. Focus on understanding concepts before memorizing formulas.",
+      "Mathematical thinking develops with practice! 📐 Use our tutorial sheets from the study drive, work through examples step-by-step, and don't hesitate to ask for help when stuck!"
+    ]
+  },
+
+  programming: {
+    keywords: ['programming', 'coding', 'python', 'java', 'javascript', 'c++', 'code', 'software'],
+    responses: [
+      "Programming is a valuable skill! 💻 Check our drive for coding resources and practice problems. Start with basics, code daily, and work on small projects to build experience.",
+      "Coding gets easier with practice! 🚀 Our study materials include programming tutorials and examples. Focus on problem-solving logic rather than just syntax.",
+      "Programming success comes from consistent practice! 🛠️ Use our resources, join coding communities, and remember - debugging is part of learning!"
+    ]
+  },
+
+  science: {
+    keywords: ['physics', 'chemistry', 'biology', 'science', 'lab', 'experiment', 'research'],
+    responses: [
+      "Science is about understanding the world around us! 🔬 Our drive has comprehensive science resources including lab manuals and theory notes. Focus on concepts and practical applications.",
+      "Scientific learning combines theory and practice! 🧪 Check our study materials for detailed explanations and lab procedures. Always try to understand the 'why' behind phenomena.",
+      "Research and experimentation are key to science! 📚 Use our PPTs and notes for visual learning, and don't just memorize - understand the underlying principles!"
+    ]
+  },
+
+  // Motivational and wellbeing
+  motivation: {
+    keywords: ['motivated', 'motivation', 'discouraged', 'difficult', 'hard', 'struggling', 'stress', 'overwhelmed'],
+    responses: [
+      "Feeling challenged is part of growing! 💪 Remember why you started your studies. Take things one step at a time, use our resources effectively, and don't hesitate to seek support.",
+      "Every successful student faces difficulties! 🌟 Break overwhelming tasks into smaller pieces, celebrate small wins, and remember that asking for help shows wisdom, not weakness.",
+      "You've got this! 🎯 Use effective study techniques, manage your time well, and remember that progress comes from consistency, not perfection. Our resources are here to support you!",
+      "Stress is normal during studies! 🧘 Take regular breaks, practice relaxation techniques, maintain a healthy balance, and remember that setbacks are temporary. Keep pushing forward!"
+    ]
+  },
+
+  // Casual responses
+  thanks: {
+    keywords: ['thank you', 'thanks', 'thank', 'appreciate', 'grateful'],
+    responses: [
+      "You're very welcome! 😊 I'm always here to help with your academic journey. Is there anything else you'd like to know about studying or our resources?",
+      "Happy to help! 🌟 That's what I'm here for. Feel free to ask me about any study techniques, resources, or academic challenges!",
+      "My pleasure! 😄 Remember, consistent effort and the right techniques lead to success. If you have more questions, just ask!"
+    ]
+  },
+
+  wellbeing: {
+    keywords: ['how are you', 'how do you do', 'whats up', "what's up", 'how you doing'],
+    responses: [
+      "I'm doing great and ready to help you succeed academically! 🤖 How are your studies going? Any particular subject or topic you're working on?",
+      "I'm functioning perfectly and excited to assist with your learning! 😄 What study challenges can I help you tackle today?",
+      "All systems running smoothly! 🚀 I'm here to support your academic success. What would you like to learn about?"
+    ]
+  },
+
+  // Default fallback
+  default: [
+    "That's an interesting question! While I specialize in study techniques, note-taking, concentration tips, and academic resources, I'd love to help if you have any study-related questions! 🤔",
+    "I'm focused on helping you excel academically! 📚 Ask me about study methods, note-taking techniques, concentration tips, or check out our comprehensive resource drive!",
+    "I'm your study companion, so I'm best at helping with academic success strategies! 🎓 What study challenges are you facing that I can help with?",
+    "Great question! I'm designed to help with studying, concentration, note-taking, and academic resources. What specific study topic would you like assistance with? 💡"
+  ]
+};
+
+// Chatbot DOM elements
+const chatbotBtn = document.getElementById('chatbotBtn');
+const chatbotModal = document.getElementById('chatbotModal');
+const chatbotClose = document.getElementById('chatbotClose');
+const chatbotMessages = document.getElementById('chatbotMessages');
+const chatbotInput = document.getElementById('chatbotInput');
+const chatbotSend = document.getElementById('chatbotSend');
+
+// Chatbot functionality
+chatbotBtn.onclick = () => {
+  if (chatbotModal.style.display === 'flex') {
+    chatbotModal.style.display = 'none';
+  } else {
+    chatbotModal.style.display = 'flex';
+    chatbotInput.focus();
+  }
+};
+
+chatbotClose.onclick = () => {
+  chatbotModal.style.display = 'none';
+};
+
+function scrollChatToBottom() {
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function addChatMessage(content, isUser = false) {
+  const msgDiv = document.createElement('div');
+  msgDiv.className = `chat-message ${isUser ? 'user' : 'ai'}`;
+  msgDiv.innerHTML = content.replace(/\n/g, '<br>');
+  chatbotMessages.appendChild(msgDiv);
+  scrollChatToBottom();
+}
+
+function showTypingIndicator() {
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'typing-indicator';
+  typingDiv.innerHTML = `
+    <span>AI is thinking</span>
+    <div class="typing-dots">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  chatbotMessages.appendChild(typingDiv);
+  scrollChatToBottom();
+  return typingDiv;
+}
+
+function getChatbotResponse(input) {
+  const text = input.toLowerCase().trim();
+  
+  // Check each category for keyword matches
+  for (const [category, data] of Object.entries(chatbotResponses)) {
+    if (category === 'default') continue;
+    
+    for (const keyword of data.keywords) {
+      if (text.includes(keyword)) {
+        const responses = data.responses;
+        return responses[Math.floor(Math.random() * responses.length)];
+      }
+    }
+  }
+  
+  // Return default response if no keywords match
+  const defaultResponses = chatbotResponses.default;
+  return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+}
+
+function sendMessage() {
+  const userInput = chatbotInput.value.trim();
+  if (!userInput) return;
+  
+  // Add user message
+  addChatMessage(userInput, true);
+  chatHistory.push({role: 'user', message: userInput});
+  chatbotInput.value = '';
+  
+  // Show typing indicator
+  const typingIndicator = showTypingIndicator();
+  
+  // Simulate AI thinking time
+  setTimeout(() => {
+    // Remove typing indicator
+    chatbotMessages.removeChild(typingIndicator);
+    
+    // Get and add AI response
+    const response = getChatbotResponse(userInput);
+    addChatMessage(response, false);
+    chatHistory.push({role: 'ai', message: response});
+  }, Math.random() * 2000 + 1000); // Random delay between 1000-3000ms
+}
+
+// Event listeners
+chatbotSend.onclick = sendMessage;
+chatbotInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Close chatbot when clicking outside
+document.addEventListener('click', (e) => {
+  if (!chatbotModal.contains(e.target) && e.target !== chatbotBtn) {
+    chatbotModal.style.display = 'none';
+  }
+});
+
+// Main app functionality (existing code remains the same)
+function showTab(tabName){
+  document.querySelectorAll('.main-content').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  event.target.classList.add('active');
+  if(tabName==='dashboard') updateDashboard();
+}
+
+function updateDashboard(){
+  document.getElementById('timetableCount').textContent=timetableItems.length;
+  document.getElementById('qrCount').textContent=qrCount;
+  document.getElementById('lostFoundCount').textContent=lostFoundItems.length;
+  document.getElementById('noticesCount').textContent=noticeItems.length;
+  updateRecentTimetable(); updateRecentLostFound(); updateRecentNotices();
+}
+
+function updateRecentTimetable(){
+  const c=document.getElementById('recentTimetable');
+  if(!timetableItems.length){c.innerHTML='<p class="text-gray-500 text-center py-4">No timetable entries yet</p>';return;}
+  c.innerHTML=timetableItems.slice(-3).reverse().map(item=>`<div class="saved-item"><span><strong>${item.subject}</strong> - ${item.day} at ${item.time}</span></div>`).join('');
+}
+
+function updateRecentLostFound(){
+  const c=document.getElementById('recentLostFound');
+  if(!lostFoundItems.length){c.innerHTML='<p class="text-gray-500 text-center py-4">No reports yet</p>';return;}
+  c.innerHTML=lostFoundItems.slice(-3).reverse().map(item=>`<div class="saved-item"><span><strong>[${item.type}]</strong> ${item.description} - ${item.location}</span></div>`).join('');
+}
+
+function updateRecentNotices(){
+  const c=document.getElementById('recentNotices');
+  if(!noticeItems.length){c.innerHTML='<p class="text-gray-500 text-center py-4">No notices posted yet</p>';return;}
+  c.innerHTML=noticeItems.slice(-3).reverse().map(item=>`<div class="saved-item"><span><strong>[${item.category}]</strong> ${item.title}</span></div>`).join('');
+}
+
+// Theme functionality
+const themeBtn=document.getElementById('themeBtn'),themePanel=document.getElementById('themePanel'),
+colorSelect=document.getElementById('colorSelect'),fontSelect=document.getElementById('fontSelect'),darkToggle=document.getElementById('darkToggle'),
+saveTheme=document.getElementById('saveTheme');
+
+themeBtn.onclick=()=>{themePanel.style.display=themePanel.style.display==='block'?'none':'block';};
+
+window.addEventListener('load',()=>{
+  const savedColor=localStorage.getItem('themeColor')||'blue',f=localStorage.getItem('themeFont'),d=localStorage.getItem('themeDark');
+  applyTheme(savedColor); if(f)document.body.style.fontFamily=f;
+  if(d==='true'){document.body.classList.add('bg-gray-900','text-gray-100');
+    document.body.classList.remove('bg-gray-100','text-gray-800');darkToggle.checked=true;}
+  colorSelect.value=savedColor; if(f)fontSelect.value=f; updateDashboard();
+});
+
+function applyTheme(color){
+  document.body.classList.remove('theme-blue','theme-green','theme-purple','theme-amber','theme-red','theme-pink');
+  document.body.classList.add('theme-'+color);
+}
+
+saveTheme.onclick=function(){
+  const c=colorSelect.value,f=fontSelect.value,d=darkToggle.checked;
+  localStorage.setItem('themeColor',c);localStorage.setItem('themeFont',f);localStorage.setItem('themeDark',d);
+  applyTheme(c);document.body.style.fontFamily=f;
+  if(d){document.body.classList.add('bg-gray-900','text-gray-100');document.body.classList.remove('bg-gray-100','text-gray-800');}
+  else{document.body.classList.add('bg-gray-100','text-gray-800');document.body.classList.remove('bg-gray-900','text-gray-100');}
+  themePanel.style.display='none';
+};
+
+// Feature modals
+const featureModal=document.getElementById('featureModal'),featureContent=document.getElementById('featureContent');
+
+function showFeature(type){
+  let html='<button id="closeFeatureBtn" onclick="closeFeature()">&times;</button>';
+  if(type==='timetable'){html+=`<div>
+    <h2 class="text-2xl font-bold mb-2">📅 Timetable Generator</h2>
+    <p class="mb-4">Create and manage your weekly class schedule.</p>
+    <div class="space-y-2 mb-4">
+      <div><label>Subject Name:</label><input type="text" id="subjectName" class="w-full px-3 py-2"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label>Day:</label><select id="daySelect" class="w-full px-3 py-2">
+          <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+          <option>Thursday</option><option>Friday</option></select></div>
+        <div><label>Time:</label><input type="time" id="timeInput" class="w-full px-3 py-2"></div>
+      </div>
+      <button class="add-timetable-btn btn-primary px-4 py-2 w-full">Add to Timetable</button>
+    </div>
+    <div class="saved-items"><h3 class="font-bold mb-2">Your Timetable:</h3>
+      <div id="timetableList">${renderTimetableItems()}</div></div>
+  </div>`;}
+  else if(type==='qr'){html+=`<div>
+    <h2 class="text-2xl font-bold mb-2">📱 QR Generator</h2>
+    <p class="mb-4">Generate QR codes for links, events, or text.</p>
+    <div class="space-y-2 mb-4">
+      <div><label>Content Type:</label>
+        <select id="qrType" class="w-full px-3 py-2">
+          <option>Website URL</option><option>Text Message</option>
+          <option>Event Details</option><option>Contact Info</option>
+        </select></div>
+      <div><label>Content:</label>
+        <textarea id="qrContent" class="w-full px-3 py-2" rows="2"></textarea>
+      </div>
+      <button class="generate-qr-btn btn-primary px-4 py-2 w-full">Generate QR Code</button>
+    </div>
+    <div id="qrResult" class="qr-container hidden">
+      <h4 class="font-bold mb-2">Generated QR Code:</h4>
+      <div id="qrDisplay"></div>
+      <button class="download-btn" onclick="downloadQR()">Download QR Code</button>
+    </div></div>`;}
+  else if(type==='lostfound'){html+=`<div>
+    <h2 class="text-2xl font-bold mb-2">🔍 Lost & Found</h2>
+    <p class="mb-4">Report lost items or help others find their belongings.</p>
+    <div class="space-y-2 mb-4">
+      <div class="grid grid-cols-2 gap-3">
+        <button class="report-lost-btn btn-primary px-4 py-2">Report Lost</button>
+        <button class="report-found-btn btn-primary px-4 py-2">Report Found</button>
+      </div>
+      <div><label>Item Description:</label><input type="text" id="itemDesc" class="w-full px-3 py-2"></div>
+      <div><label>Location:</label><input type="text" id="itemLocation" class="w-full px-3 py-2"></div>
+      <div><label>Contact:</label><input type="text" id="itemContact" class="w-full px-3 py-2"></div>
+    </div>
+    <div class="saved-items"><h3 class="font-bold mb-2">Recent Reports:</h3>
+      <div id="lostFoundList">${renderLostFoundItems()}</div></div>
+  </div>`;}
+  else if(type==='noticeboard'){html+=`<div>
+    <h2 class="text-2xl font-bold mb-2">📢 Notice Board</h2>
+    <p class="mb-4">Post announcements or view campus notices.</p>
+    <div class="space-y-2 mb-4">
+      <div><label>Notice Title:</label><input type="text" id="noticeTitle" class="w-full px-3 py-2"></div>
+      <div><label>Category:</label>
+        <select id="noticeCategory" class="w-full px-3 py-2">
+          <option>General</option><option>Academic</option>
+          <option>Events</option><option>Sports</option><option>Emergency</option>
+        </select></div>
+      <div><label>Message:</label>
+        <textarea id="noticeMessage" class="w-full px-3 py-2" rows="2"></textarea>
+      </div>
+      <button class="post-notice-btn btn-primary px-4 py-2 w-full">Post Notice</button>
+    </div>
+    <div class="saved-items"><h3 class="font-bold mb-2">Recent Notices:</h3>
+      <div id="noticeList">${renderNoticeItems()}</div></div>
+  </div>`;}
+  featureContent.innerHTML=html;featureModal.style.display='flex';
+}
+
+function closeFeature(){featureModal.style.display='none';}
+
+function downloadQR(){
+  const canvas=document.querySelector('#qrDisplay canvas');
+  if(canvas){const link=document.createElement('a');link.download='qr-code.png';link.href=canvas.toDataURL();link.click();}
+}
+
+function renderTimetableItems(){
+  return timetableItems.map((item,idx)=>
+    `<div class="saved-item"><span><strong>${item.subject}</strong> - ${item.day} at ${item.time}</span>
+    <button class="delete-btn" data-type="timetable" data-index="${idx}">Delete</button></div>`).join('');
+}
+
+function renderLostFoundItems(){
+  return lostFoundItems.map((item,idx)=>
+    `<div class="saved-item"><span><strong>[${item.type}]</strong> ${item.description} - ${item.location}</span>
+    <button class="delete-btn" data-type="lostfound" data-index="${idx}">Delete</button></div>`).join('');
+}
+
+function renderNoticeItems(){
+  return noticeItems.map((item,idx)=>
+    `<div class="saved-item"><span><strong>[${item.category}]</strong> ${item.title}</span>
+    <button class="delete-btn" data-type="notice" data-index="${idx}">Delete</button></div>`).join('');
+}
+
+// Event handling for features
+document.addEventListener('click',function(event){
+  if(event.target.classList.contains('add-timetable-btn')){
+    const subject=document.getElementById('subjectName').value.trim(),day=document.getElementById('daySelect').value,time=document.getElementById('timeInput').value;
+    if(subject&&time){
+      timetableItems.push({subject,day,time,date:new Date().toLocaleDateString()});
+      localStorage.setItem('timetable',JSON.stringify(timetableItems));
+      document.getElementById('timetableList').innerHTML=renderTimetableItems();
+      document.getElementById('subjectName').value='';document.getElementById('timeInput').value='';
+      alert('Added to timetable!');updateDashboard();
+    }else alert('Fill in subject & time');
+  }
+  
+  if(event.target.classList.contains('generate-qr-btn')){
+    const content=document.getElementById('qrContent').value.trim();
+    if(content){
+      const qrDisplay=document.getElementById('qrDisplay');qrDisplay.innerHTML='';
+      new QRCode(qrDisplay,{text:content,width:180,height:180,colorDark:'#000',colorLight:'#FFF'});
+      qrCount++;localStorage.setItem('qrCount',qrCount.toString());
+      document.getElementById('qrResult').classList.remove('hidden');updateDashboard();
+      document.getElementById('qrContent').value='';
+    }else alert('Enter content for QR');
+  }
+  
+  if(event.target.classList.contains('report-lost-btn')||event.target.classList.contains('report-found-btn')){
+    const type=event.target.classList.contains('report-lost-btn')?'Lost':'Found',
+      description=document.getElementById('itemDesc').value.trim(),
+      location=document.getElementById('itemLocation').value.trim(),
+      contact=document.getElementById('itemContact').value.trim();
+    if(description&&location&&contact){
+      lostFoundItems.push({type,description,location,contact,date:new Date().toLocaleDateString()});
+      localStorage.setItem('lostfound',JSON.stringify(lostFoundItems));
+      document.getElementById('lostFoundList').innerHTML=renderLostFoundItems();
+      document.getElementById('itemDesc').value='';document.getElementById('itemLocation').value='';document.getElementById('itemContact').value='';
+      alert(type+' item reported!');updateDashboard();
+    }else alert('Fill in all fields');
+  }
+  
+  if(event.target.classList.contains('post-notice-btn')){
+    const title=document.getElementById('noticeTitle').value.trim(),
+      category=document.getElementById('noticeCategory').value,
+      message=document.getElementById('noticeMessage').value.trim();
+    if(title&&message){
+      noticeItems.push({title,category,message,date:new Date().toLocaleDateString()});
+      localStorage.setItem('notices',JSON.stringify(noticeItems));
+      document.getElementById('noticeList').innerHTML=renderNoticeItems();
+      document.getElementById('noticeTitle').value='';document.getElementById('noticeMessage').value='';
+      alert('Notice posted!');updateDashboard();
+    }else alert('Title & Message required!');
+  }
+  
+  if(event.target.classList.contains('delete-btn')){
+    const type=event.target.dataset.type,idx=parseInt(event.target.dataset.index);
+    if(type==='timetable'){
+      timetableItems.splice(idx,1);localStorage.setItem('timetable',JSON.stringify(timetableItems));
+      document.getElementById('timetableList').innerHTML=renderTimetableItems();
+    }else if(type==='lostfound'){
+      lostFoundItems.splice(idx,1);localStorage.setItem('lostfound',JSON.stringify(lostFoundItems));
+      document.getElementById('lostFoundList').innerHTML=renderLostFoundItems();
+    }else if(type==='notice'){
+      noticeItems.splice(idx,1);localStorage.setItem('notices',JSON.stringify(noticeItems));
+      document.getElementById('noticeList').innerHTML=renderNoticeItems();
+    }
+    updateDashboard();
+  }
+});
+
+featureModal.onclick=function(event){if(event.target===featureModal)closeFeature();}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeFeature();});
+document.addEventListener('DOMContentLoaded',function(){updateDashboard();});
+</script>
+</body>
+</html>
