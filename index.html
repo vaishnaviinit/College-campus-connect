@@ -8,42 +8,42 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
-      --bg: #f3f4f6;
-      --fg: #1f2937;
-      --accent: #3b82f6;
-      --accent-dark: #1d4ed8;
-      --card-bg: #ffffff;
-      --card-border: #e5e7eb;
+      --bg: 
+      --fg: 
+      --accent: 
+      --accent-dark: 
+      --card-bg: 
+      --card-border: 
     }
     .theme-blue {
-      --bg: #f3f4f6; --fg: #1f2937;
-      --accent: #3b82f6; --accent-dark: #1d4ed8;
-      --card-bg: #fff; --card-border: #93c5fd;
+      --bg: 
+      --accent: 
+      --card-bg: 
     }
     .theme-green {
-      --bg: #ecfdf5; --fg: #065f46;
-      --accent: #10b981; --accent-dark: #047857;
-      --card-bg: #fff; --card-border: #6ee7b7;
+      --bg: 
+      --accent: 
+      --card-bg: 
     }
     .theme-purple {
-      --bg: #faf5ff; --fg: #4c1d95;
-      --accent: #8b5cf6; --accent-dark: #7c3aed;
-      --card-bg: #fff; --card-border: #c4b5fd;
+      --bg: 
+      --accent: 
+      --card-bg: 
     }
     .theme-amber {
-      --bg: #fff7ed; --fg: #92400e;
-      --accent: #f59e0b; --accent-dark: #b45309;
-      --card-bg: #fff; --card-border: #fde68a;
+      --bg: 
+      --accent: 
+      --card-bg: 
     }
     .theme-red {
-      --bg: #fef2f2; --fg: #991b1b;
-      --accent: #ef4444; --accent-dark: #dc2626;
-      --card-bg: #fff; --card-border: #fecaca;
+      --bg: 
+      --accent: 
+      --card-bg: 
     }
     .theme-pink {
-      --bg: #fdf2f8; --fg: #831843;
-      --accent: #ec4899; --accent-dark: #be185d;
-      --card-bg: #fff; --card-border: #f9a8d4;
+      --bg: 
+      --accent: 
+      --card-bg: 
     }
     body {
       background: var(--bg);
@@ -54,7 +54,7 @@
     }
     .theme-button {
       position: fixed; bottom: 20px; right: 20px;
-      background: var(--accent); color: #fff; border-radius: 50%;
+      background: var(--accent); color: 
       width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 1.5rem; cursor:pointer;
       transition: all 0.3s ease;
@@ -69,10 +69,10 @@
       display:none; z-index:100; width:235px; border:1px solid var(--card-border);
       box-shadow:0 4px 12px rgba(0,0,0,0.11);
     }
-    /* Chatbot Styles */
+    
     .chatbot-button {
       position: fixed; bottom: 85px; right: 20px;
-      background: var(--accent); color: #fff; border-radius: 50%;
+      background: var(--accent); color: 
       width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 1.25rem; cursor:pointer;
       transition: all 0.3s ease; z-index: 150;
@@ -159,31 +159,31 @@
     .nav-tab.active { border-bottom:2px solid var(--accent); color:var(--accent);}
     .main-content { display:none;}
     .main-content.active {display:block;}
-    .feature-card,.stat-card,.saved-item,#themePanel,.qr-container {
+    .feature-card,.stat-card,.saved-item,
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 0.8rem; transition:.3s;
     }
     .feature-card {padding:1.2rem;}
     .feature-card:hover {box-shadow:0 6px 22px rgba(0,0,0,0.09); cursor: pointer;}
     .stat-card {
-      background:var(--accent); color:#fff; box-shadow:0 0 10px rgba(0,0,0,0.10);
+      background:var(--accent); color:
       margin-bottom:1.4rem;
     }
     .btn-primary {
-      background: var(--accent) !important; color: #fff !important;
+      background: var(--accent) !important; color: 
       border: none; border-radius:0.5rem; transition:.2s;
     }
     .btn-primary:hover {background:var(--accent-dark) !important;}
     .saved-item {display:flex;justify-content:space-between;align-items:center;padding:0.6rem;}
-    .delete-btn {background:var(--accent);color:#fff;border:none;border-radius:0.3rem;padding:0.2rem 0.7rem;cursor:pointer;}
+    .delete-btn {background:var(--accent);color:
     .delete-btn:hover {background:var(--accent-dark);}
     input,select,textarea {border:1px solid var(--card-border);border-radius:0.4rem;}
     input,select,textarea,button {font-family:inherit;}
     .qr-container {padding:1rem;}
-    .download-btn {background:var(--accent); color:#fff;border:none;border-radius:0.4rem;padding:0.4rem 1rem;margin-top:0.7rem;}
+    .download-btn {background:var(--accent); color:
     .download-btn:hover {background:var(--accent-dark);}
-    #featureModal {display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.09);align-items:center;justify-content:center;z-index:200;}
-    #featureContent {background:var(--card-bg);padding:2rem;border-radius:1rem;max-width:420px;width:calc(100vw - 3rem);box-shadow:0 8px 24px rgba(0,0,0,0.13);color:var(--fg);}
-    #closeFeatureBtn { float:right; font-size:2rem; color:var(--accent); background:none;border:none;cursor:pointer;}
+    
+    
+    
   </style>
 </head>
 <body class="theme-blue">
@@ -267,10 +267,10 @@
   </div>
 </div>
 
-<!-- Feature Modal -->
+
 <div id="featureModal"><div id="featureContent"></div></div>
 
-<!-- Theme Settings -->
+
 <div id="themeBtn" class="theme-button">⚙️</div>
 <div id="themePanel" class="theme-panel">
   <h2 class="text-lg font-semibold mb-2">🎨 Theme Settings</h2>
@@ -301,7 +301,7 @@
   <button id="saveTheme" class="btn-primary px-3 py-1 w-full">Save</button>
 </div>
 
-<!-- Enhanced Smart AI Study Assistant -->
+
 <div id="chatbotBtn" class="chatbot-button">🤖</div>
 <div id="chatbotModal" class="chatbot-modal">
   <div class="chatbot-header">
@@ -327,16 +327,14 @@
 </div>
 
 <script>
-// Global variables
 let timetableItems = JSON.parse(localStorage.getItem('timetable')||'[]');
 let lostFoundItems = JSON.parse(localStorage.getItem('lostfound')||'[]');
 let noticeItems = JSON.parse(localStorage.getItem('notices')||'[]');
 let qrCount = parseInt(localStorage.getItem('qrCount')||'0');
 let chatHistory = [];
 
-// Enhanced Smart Study Assistant Knowledge Base
 const chatbotResponses = {
-  // Greetings
+ 
   greetings: {
     keywords: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings'],
     responses: [
@@ -347,7 +345,7 @@ const chatbotResponses = {
     ]
   },
 
-  // How to study better - Comprehensive techniques
+ 
   studyBetter: {
     keywords: ['how to study better', 'study better', 'improve studying', 'study effectively', 'study tips', 'better studying', 'study methods', 'study techniques'],
     responses: [
@@ -359,7 +357,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Note-taking methods
+ 
   noteTaking: {
     keywords: ['how to make notes', 'note taking', 'taking notes', 'make notes', 'note methods', 'notes techniques', 'better notes', 'effective notes'],
     responses: [
@@ -371,7 +369,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Concentration and focus
+ 
   concentration: {
     keywords: ['how to concentrate', 'concentration', 'focus', 'focusing', 'attention', 'distracted', 'cant focus', 'improve focus'],
     responses: [
@@ -383,7 +381,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Study resources with the Google Drive link
+ 
   resources: {
     keywords: ['study material', 'resources', 'study resources', 'materials', 'books', 'where to study', 'learning resources', 'study help'],
     responses: [
@@ -395,7 +393,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Memory and retention
+ 
   memory: {
     keywords: ['memory', 'remember', 'memorize', 'retention', 'forget', 'recall', 'memorization'],
     responses: [
@@ -405,7 +403,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Time management
+ 
   timeManagement: {
     keywords: ['time management', 'manage time', 'schedule', 'planning', 'organize', 'productivity', 'procrastination'],
     responses: [
@@ -415,7 +413,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Exam preparation
+ 
   examPrep: {
     keywords: ['exam preparation', 'exam prep', 'test preparation', 'prepare for exam', 'exam tips', 'exam strategy'],
     responses: [
@@ -425,7 +423,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Campus tools (existing functionality)
+ 
   timetable: {
     keywords: ['timetable', 'schedule', 'class schedule', 'time table', 'classes', 'class timing'],
     responses: [
@@ -462,7 +460,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Academic subjects
+ 
   math: {
     keywords: ['math', 'mathematics', 'calculus', 'algebra', 'geometry', 'statistics', 'equations'],
     responses: [
@@ -490,7 +488,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Motivational and wellbeing
+ 
   motivation: {
     keywords: ['motivated', 'motivation', 'discouraged', 'difficult', 'hard', 'struggling', 'stress', 'overwhelmed'],
     responses: [
@@ -501,7 +499,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Casual responses
+ 
   thanks: {
     keywords: ['thank you', 'thanks', 'thank', 'appreciate', 'grateful'],
     responses: [
@@ -520,7 +518,7 @@ const chatbotResponses = {
     ]
   },
 
-  // Default fallback
+ 
   default: [
     "That's an interesting question! While I specialize in study techniques, note-taking, concentration tips, and academic resources, I'd love to help if you have any study-related questions! 🤔",
     "I'm focused on helping you excel academically! 📚 Ask me about study methods, note-taking techniques, concentration tips, or check out our comprehensive resource drive!",
@@ -529,7 +527,6 @@ const chatbotResponses = {
   ]
 };
 
-// Chatbot DOM elements
 const chatbotBtn = document.getElementById('chatbotBtn');
 const chatbotModal = document.getElementById('chatbotModal');
 const chatbotClose = document.getElementById('chatbotClose');
@@ -537,7 +534,6 @@ const chatbotMessages = document.getElementById('chatbotMessages');
 const chatbotInput = document.getElementById('chatbotInput');
 const chatbotSend = document.getElementById('chatbotSend');
 
-// Chatbot functionality
 chatbotBtn.onclick = () => {
   if (chatbotModal.style.display === 'flex') {
     chatbotModal.style.display = 'none';
@@ -582,7 +578,7 @@ function showTypingIndicator() {
 function getChatbotResponse(input) {
   const text = input.toLowerCase().trim();
   
-  // Check each category for keyword matches
+ 
   for (const [category, data] of Object.entries(chatbotResponses)) {
     if (category === 'default') continue;
     
@@ -594,7 +590,7 @@ function getChatbotResponse(input) {
     }
   }
   
-  // Return default response if no keywords match
+ 
   const defaultResponses = chatbotResponses.default;
   return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
 }
@@ -603,27 +599,26 @@ function sendMessage() {
   const userInput = chatbotInput.value.trim();
   if (!userInput) return;
   
-  // Add user message
+ 
   addChatMessage(userInput, true);
   chatHistory.push({role: 'user', message: userInput});
   chatbotInput.value = '';
   
-  // Show typing indicator
+ 
   const typingIndicator = showTypingIndicator();
   
-  // Simulate AI thinking time
+ 
   setTimeout(() => {
-    // Remove typing indicator
+   
     chatbotMessages.removeChild(typingIndicator);
     
-    // Get and add AI response
+   
     const response = getChatbotResponse(userInput);
     addChatMessage(response, false);
     chatHistory.push({role: 'ai', message: response});
-  }, Math.random() * 2000 + 1000); // Random delay between 1000-3000ms
+  }, Math.random() * 2000 + 1000);
 }
 
-// Event listeners
 chatbotSend.onclick = sendMessage;
 chatbotInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
@@ -632,14 +627,12 @@ chatbotInput.addEventListener('keydown', (e) => {
   }
 });
 
-// Close chatbot when clicking outside
 document.addEventListener('click', (e) => {
   if (!chatbotModal.contains(e.target) && e.target !== chatbotBtn) {
     chatbotModal.style.display = 'none';
   }
 });
 
-// Main app functionality (existing code remains the same)
 function showTab(tabName){
   document.querySelectorAll('.main-content').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
@@ -674,7 +667,6 @@ function updateRecentNotices(){
   c.innerHTML=noticeItems.slice(-3).reverse().map(item=>`<div class="saved-item"><span><strong>[${item.category}]</strong> ${item.title}</span></div>`).join('');
 }
 
-// Theme functionality
 const themeBtn=document.getElementById('themeBtn'),themePanel=document.getElementById('themePanel'),
 colorSelect=document.getElementById('colorSelect'),fontSelect=document.getElementById('fontSelect'),darkToggle=document.getElementById('darkToggle'),
 saveTheme=document.getElementById('saveTheme');
@@ -703,7 +695,6 @@ saveTheme.onclick=function(){
   themePanel.style.display='none';
 };
 
-// Feature modals
 const featureModal=document.getElementById('featureModal'),featureContent=document.getElementById('featureContent');
 
 function showFeature(type){
@@ -782,7 +773,7 @@ function showFeature(type){
 function closeFeature(){featureModal.style.display='none';}
 
 function downloadQR(){
-  const canvas=document.querySelector('#qrDisplay canvas');
+  const canvas=document.querySelector('
   if(canvas){const link=document.createElement('a');link.download='qr-code.png';link.href=canvas.toDataURL();link.click();}
 }
 
@@ -804,7 +795,6 @@ function renderNoticeItems(){
     <button class="delete-btn" data-type="notice" data-index="${idx}">Delete</button></div>`).join('');
 }
 
-// Event handling for features
 document.addEventListener('click',function(event){
   if(event.target.classList.contains('add-timetable-btn')){
     const subject=document.getElementById('subjectName').value.trim(),day=document.getElementById('daySelect').value,time=document.getElementById('timeInput').value;
@@ -821,7 +811,7 @@ document.addEventListener('click',function(event){
     const content=document.getElementById('qrContent').value.trim();
     if(content){
       const qrDisplay=document.getElementById('qrDisplay');qrDisplay.innerHTML='';
-      new QRCode(qrDisplay,{text:content,width:180,height:180,colorDark:'#000',colorLight:'#FFF'});
+      new QRCode(qrDisplay,{text:content,width:180,height:180,colorDark:'
       qrCount++;localStorage.setItem('qrCount',qrCount.toString());
       document.getElementById('qrResult').classList.remove('hidden');updateDashboard();
       document.getElementById('qrContent').value='';
